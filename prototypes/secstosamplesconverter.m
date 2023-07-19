@@ -1,5 +1,6 @@
 %% Example conversion of seconds to samples
 % This script was adapted and referenced from Tarr, (2019), Hack Audio.
+% Oberon Day-West (21501990).
 
 %% Ms to Secs to Samples
 

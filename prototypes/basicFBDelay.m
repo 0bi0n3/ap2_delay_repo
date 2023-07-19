@@ -1,17 +1,19 @@
 %% Basic feedback delay
 % This script was adapted and referenced from Tarr, (2019), Hack Audio.
+% Oberon Day-West (21501990).
 
 %%
 % import example audio file
-%[x, Fs] = audioread( 'lordoftherings_fellowship.wav' );
-x = zeros(100,1);
+[x, Fs] = audioread( 'lordoftherings_fellowship.wav' );
 
-x(1) = 1;
+% or create impulse
 
-Fs = 48000;
+%x = zeros(100,1);
+%x(1) = 1;
+%Fs = 48000;
 
 % set delay time (seconds)
-delayTime = 750;
+delayTime = 500;
 
 timeSec = delayTime/1000;
 
