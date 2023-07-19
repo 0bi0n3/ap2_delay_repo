@@ -5,6 +5,18 @@
 #include "controller.h"
 #include "cids.h"
 
+/*
+ WANT
+ 
+ - parameter for controlling the first delay time (seconds)
+ - parameter for controllering the other three delay times (Milliseconds)
+ - dry/wet control for each tap
+ - gain for each tap
+ - feedback knob for each tap
+ - overall gain knob
+ 
+ */
+
 
 using namespace Steinberg;
 

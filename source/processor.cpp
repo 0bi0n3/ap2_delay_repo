@@ -8,6 +8,14 @@
 #include "base/source/fstreamer.h"
 #include "pluginterfaces/vst/ivstparameterchanges.h"
 
+/*
+ TO DO
+ - parse audio into the process block
+ - parse audio a buffer
+ - parse the buffer into a function which causes a delay
+ 
+ */
+
 using namespace Steinberg;
 
 namespace delay_sfx {
