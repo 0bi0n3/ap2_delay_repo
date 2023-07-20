@@ -95,7 +95,6 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
 	
 	//--- Here you have to implement your processing
     
-    /Users/OberonDW/Desktop/UWL/AP2_desktop/Assignments/Assignment1/delay_HPF.png
 
 	return kResultOk;
 }
