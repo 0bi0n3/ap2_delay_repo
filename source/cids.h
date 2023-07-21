@@ -7,6 +7,12 @@
 #include "pluginterfaces/base/funknown.h"
 #include "pluginterfaces/vst/vsttypes.h"
 
+enum GainParams : Steinberg::Vst::ParamID
+{
+    kParamGainId = 102,
+};
+
+
 namespace delay_sfx {
 //------------------------------------------------------------------------
 static const Steinberg::FUID kdelay_oneProcessorUID (0xE4964DE3, 0x799A5817, 0x8174458A, 0xEEF2A6F9);

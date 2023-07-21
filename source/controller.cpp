@@ -37,6 +37,7 @@ tresult PLUGIN_API delay_oneController::initialize (FUnknown* context)
 	}
 
 	// Here you could register some parameters
+    parameters.addParameter( STR16( "Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, GainParams::kParamGainId, 0 );
 
 	return result;
 }

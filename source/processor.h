@@ -51,6 +51,8 @@ public:
     
 //------------------------------------------------------------------------
 protected:
+    Steinberg::Vst::ParamValue mGain = 1.0;
+    
     const int maximumDelayTime = 2; // seconds
     int sampleRate; // Hz, to be initialized in setupProcessing method
 
