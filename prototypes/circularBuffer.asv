@@ -1,0 +1,48 @@
+%% Circular Buffer
+%
+% This script was adapted and referenced from Zolzer (2011), Pirkle (2019) and Tarr (2019).
+% Oberon Day-West (21501990).
+%%
+
+
+% import audio for testing
+[x, fs] = audioread('betweensnare.wav');
+
+% number of samples to write
+numSamplesWrite = 1024;
+
+% initialise buffer
+buffer = zeros(numSamplesWrite, 1);
+
+% initialise write pointer
+writePointer = 1;
+
+% loop over audio and intake samples
+for n = 1:numSamplesWrite
+    % write one sample into buffer
+    buffer(writePointer) = x(n);
+    
+    % increment buffer index
+    writePointer = writePointer + 1;
+
+    
+
+% write audio into buffer
+buffer(writePointer) = x;
+
+
+% error check for going outside of buffer allocation
+if( writePointer == bufferLength + 1 )
+    writePointer = 1; % wrap buffer writer position back to the beginning
+end
+
+% delay time in samples
+numSampleDelay = x * 2;
+
+% read pointer
+readPointer = writePointer - numSampleDelay;
+
+% check read pointer is not negative
+if( readPointer < 1 )
+    readPointer = readPointer + bufferLength;
+end
