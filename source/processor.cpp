@@ -24,9 +24,13 @@ namespace delay_sfx {
 // delay_oneProcessor
 //------------------------------------------------------------------------
 delay_oneProcessor::delay_oneProcessor ()
+: delayLine(sampleRate, 1.0f)
 {
 	//--- set the wanted controller for our processor
 	setControllerClass (kdelay_oneControllerUID);
+    
+    delayLine.setDelayTime(0, 0.5f, sampleRate);
+    delayLine.setTapMix(0, 0.5f);
 }
 
 //------------------------------------------------------------------------
@@ -128,12 +132,18 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
         Vst::Sample32* ptrIn = (Vst::Sample32*)in[i];
         Vst::Sample32* ptrOut = (Vst::Sample32*)out[i];
         Vst::Sample32 tmp;
+        
         // for each sample in this channel
         while (--samples >= 0)
         {
+            // process delay
+           float input = static_cast<float>(*ptrIn++);
+           float output = gain * delayLine.processBlock(input);
+           (*ptrOut++) = output;
             // apply gain
-            tmp = (*ptrIn++) * gain;
-            (*ptrOut++) = tmp;
+//            tmp = (*ptrIn++) * gain;
+//            (*ptrOut++) = tmp;
+    
         }
     }
     // Here could check the silent flags

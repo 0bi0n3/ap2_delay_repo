@@ -9,17 +9,19 @@
 #define delayLine_h
 
 #include <array>
+#include <vector>
 
 class DelayLine
 {
 public:
-    DelayLine();
+    DelayLine( float sampleRate, float maxDelayTime);
+    
     void setDelayTime( int tapIndex, float delayTimeSeconds, float sampleRate );
     void setTapMix(int tapIndex, float mixLevel );
     float processBlock( float input );
     
 private:
-    std::array<float, 44100> buffer;
+    std::vector<float> buffer;
     int writeIndex;
     std::array<int, 4> readIndex;
     std::array<float, 4> taps;

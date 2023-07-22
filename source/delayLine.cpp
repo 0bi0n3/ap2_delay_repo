@@ -9,14 +9,14 @@
 #include "circularBuffer.h"
 #include "delayLine.h"
 
-DelayLine::DelayLine()
+DelayLine::DelayLine( float sampleRate, float maxDelayTime)
 {
-    buffer.fill( 0.0f );
+    buffer.resize( static_cast<int>( sampleRate * maxDelayTime ), 0.0f);
     writeIndex = 0;
     readIndex.fill( 0 );
     taps.fill( 0.0f );
 }
-    
+
 void DelayLine::setDelayTime( int tapIndex, float delayTimeSeconds, float sampleRate )
 {
     int delaySamples = static_cast<int>( delayTimeSeconds * sampleRate );

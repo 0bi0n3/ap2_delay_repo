@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "public.sdk/source/vst/vstaudioeffect.h"
+#include "delayLine.h"
 
 namespace delay_sfx {
 
@@ -53,6 +54,7 @@ public:
 protected:
     Steinberg::Vst::ParamValue mGain = 1.0;
     
+    
     const int maximumDelayTime = 2; // seconds
     int sampleRate; // Hz, to be initialized in setupProcessing method
 
@@ -64,6 +66,9 @@ protected:
     float tapDelay[ 4 ];
     float tapGain[ 4 ];
     float feedbackGain[ 4 ];
+    
+private:
+    DelayLine delayLine;
 };
 
 //------------------------------------------------------------------------
