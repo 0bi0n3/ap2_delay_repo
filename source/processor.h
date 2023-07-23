@@ -84,6 +84,24 @@ protected:
 private:
     double sampleRate;
     DelayLine delayLine;
+    
+    double denormalisedMasterGain;
+    
+    double denormalisedDelay1;
+    double denormalisedDelay2;
+    double denormalisedDelay3;
+    double denormalisedDelay4;
+    
+    double denormalisedTapGain1;
+    double denormalisedTapGain2;
+    double denormalisedTapGain3;
+    double denormalisedTapGain4;
+    
+    double denormalisedFeedbackGain1;
+    double denormalisedFeedbackGain2;
+    double denormalisedFeedbackGain3;
+    double denormalisedFeedbackGain4;
+
 };
 
 //------------------------------------------------------------------------

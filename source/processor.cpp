@@ -99,6 +99,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mGain = value;
+                            denormalisedMasterGain = (mGain * 40.0) - 20.0; // denormalised gain value
                         }
                     break;
                         
@@ -108,6 +109,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mDelay1 = value;
+                            denormalisedDelay1 = (mDelay1 * 2.0);
                         }
                     break;
                         
@@ -115,6 +117,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mDelay2 = value;
+                            denormalisedDelay2 = (mDelay2 * 2.0);
                         }
                     break;
 
@@ -122,6 +125,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mDelay3 = value;
+                            denormalisedDelay3 = (mDelay3 * 2.0);
                         }
                     break;
 
@@ -129,6 +133,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mDelay4 = value;
+                            denormalisedDelay4 = (mDelay4 * 2.0);
                         }
                     break;
 
@@ -138,6 +143,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mTapGain1 = value;
+                            denormalisedTapGain1 = (mTapGain1 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -145,6 +151,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mTapGain2 = value;
+                            denormalisedTapGain2 = (mTapGain2 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -152,6 +159,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mTapGain3 = value;
+                            denormalisedTapGain3 = (mTapGain3 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -159,6 +167,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mTapGain4 = value;
+                            denormalisedTapGain4 = (mTapGain4 * 40.0) - 20.0;
                         }
                     break;
 
@@ -168,6 +177,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mFeedbackGain1 = value;
+                            denormalisedFeedbackGain1 = (mFeedbackGain1 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -175,6 +185,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mFeedbackGain2 = value;
+                            denormalisedFeedbackGain2 = (mFeedbackGain2 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -182,6 +193,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mFeedbackGain3 = value;
+                            denormalisedFeedbackGain3 = (mFeedbackGain3 * 40.0) - 20.0;
                         }
                     break;
                         
@@ -189,6 +201,7 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mFeedbackGain4 = value;
+                            denormalisedFeedbackGain4 = (mFeedbackGain4 * 40.0) - 20.0;
                         }
                     break;
 				}
