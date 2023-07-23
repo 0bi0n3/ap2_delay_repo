@@ -37,7 +37,31 @@ tresult PLUGIN_API delay_oneController::initialize (FUnknown* context)
 	}
 
 	// Here you could register some parameters
-    parameters.addParameter( STR16( "Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, GainParams::kParamGainId, 0 );
+    parameters.addParameter( STR16( "Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamGainId, 0 );
+    
+    parameters.addParameter( STR16( "Delay 1" ), STR16( "sec" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamDelayTime1Id, 0 );
+    
+    parameters.addParameter( STR16( "Delay 2" ), STR16( "sec" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamDelayTime2Id, 0 );
+    
+    parameters.addParameter( STR16( "Delay 3" ), STR16( "sec" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamDelayTime3Id, 0 );
+    
+    parameters.addParameter( STR16( "Delay 4" ), STR16( "sec" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamDelayTime4Id, 0 );
+    
+    parameters.addParameter( STR16( "Tap 1 Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamTapGain1Id, 0 );
+    
+    parameters.addParameter( STR16( "Tap 2 Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamTapGain2Id, 0 );
+    
+    parameters.addParameter( STR16( "Tap 3 Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamTapGain3Id, 0 );
+    
+    parameters.addParameter( STR16( "Tap 4 Gain" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamTapGain4Id, 0 );
+    
+    parameters.addParameter( STR16( "Feedback Gain 1" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamFeedbackGain1Id, 0 );
+    
+    parameters.addParameter( STR16( "Feedback Gain 2" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamFeedbackGain2Id, 0 );
+    
+    parameters.addParameter( STR16( "Feedback Gain 3" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamFeedbackGain3Id, 0 );
+    
+    parameters.addParameter( STR16( "Feedback Gain 4" ), STR16( "dB" ), 0, 0.5, Vst::ParameterInfo::kCanAutomate, AudioParams::kParamFeedbackGain4Id, 0 );
 
 	return result;
 }

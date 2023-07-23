@@ -24,12 +24,12 @@ namespace delay_sfx {
 // delay_oneProcessor
 //------------------------------------------------------------------------
 delay_oneProcessor::delay_oneProcessor ()
-: delayLine(sampleRate, 1.0f)
+: delayLine(48000, 1.0f)
 {
 	//--- set the wanted controller for our processor
 	setControllerClass (kdelay_oneControllerUID);
     
-    delayLine.setDelayTime(0, 0.5f, sampleRate);
+    delayLine.setDelayTime(0, 0.5f, 48000);
     delayLine.setTapMix(0, 0.5f);
 }
 
@@ -95,12 +95,20 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                 int32 numPoints = paramQueue->getPointCount ();
                 switch (paramQueue->getParameterId ())
                 {
-                    case GainParams::kParamGainId:
+                    case AudioParams::kParamGainId:
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mGain = value;
                         }
                     break;
+                        
+                    case AudioParams::kParamDelayTime1Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mDelay1 = value;
+                        }
+                    break;
+                   
 				}
 			}
 		}
@@ -175,6 +183,9 @@ tresult PLUGIN_API delay_oneProcessor::setupProcessing (Vst::ProcessSetup& newSe
 	//--- called before any processing ----
     
     sampleRate = newSetup.sampleRate;
+    
+    // Reconfigure delayLine with the actual sampleRate
+       delayLine.setDelayTime(0, 0.5f, sampleRate);
     
 	return AudioEffect::setupProcessing (newSetup);
 }

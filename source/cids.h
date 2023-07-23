@@ -7,9 +7,21 @@
 #include "pluginterfaces/base/funknown.h"
 #include "pluginterfaces/vst/vsttypes.h"
 
-enum GainParams : Steinberg::Vst::ParamID
+enum AudioParams : Steinberg::Vst::ParamID
 {
     kParamGainId = 102,
+    kParamDelayTime1Id = 103,
+    kParamDelayTime2Id = 104,
+    kParamDelayTime3Id = 105,
+    kParamDelayTime4Id = 106,
+    kParamTapGain1Id = 107,
+    kParamTapGain2Id = 108,
+    kParamTapGain3Id = 109,
+    kParamTapGain4Id = 110,
+    kParamFeedbackGain1Id = 111,
+    kParamFeedbackGain2Id = 112,
+    kParamFeedbackGain3Id = 113,
+    kParamFeedbackGain4Id = 114,
 };
 
 

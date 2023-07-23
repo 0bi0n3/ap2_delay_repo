@@ -6,7 +6,6 @@
 //
 
 #include <array>
-#include "circularBuffer.h"
 #include "delayLine.h"
 
 DelayLine::DelayLine( float sampleRate, float maxDelayTime)
