@@ -102,13 +102,95 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         }
                     break;
                         
+                    // Delay time parameters
+                        
                     case AudioParams::kParamDelayTime1Id:
                         if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
                         {
                             mDelay1 = value;
                         }
                     break;
-                   
+                        
+                    case AudioParams::kParamDelayTime2Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mDelay2 = value;
+                        }
+                    break;
+
+                    case AudioParams::kParamDelayTime3Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mDelay3 = value;
+                        }
+                    break;
+
+                    case AudioParams::kParamDelayTime4Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mDelay4 = value;
+                        }
+                    break;
+
+                    // Tap gain parameters
+
+                    case AudioParams::kParamTapGain1Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mTapGain1 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamTapGain2Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mTapGain2 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamTapGain3Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mTapGain3 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamTapGain4Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mTapGain4 = value;
+                        }
+                    break;
+
+                    // Feedback gain parameters
+
+                    case AudioParams::kParamFeedbackGain1Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mFeedbackGain1 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamFeedbackGain2Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mFeedbackGain2 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamFeedbackGain3Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mFeedbackGain3 = value;
+                        }
+                    break;
+                        
+                    case AudioParams::kParamFeedbackGain4Id:
+                        if (paramQueue->getPoint(numPoints - 1, sampleOffset, value) == kResultTrue)
+                        {
+                            mFeedbackGain4 = value;
+                        }
+                    break;
 				}
 			}
 		}

@@ -59,6 +59,20 @@ public:
 protected:
     Steinberg::Vst::ParamValue mGain = 1.0;
     Steinberg::Vst::ParamValue mDelay1 = 1.0;
+    Steinberg::Vst::ParamValue mDelay2 = 1.0;
+    Steinberg::Vst::ParamValue mDelay3 = 1.0;
+    Steinberg::Vst::ParamValue mDelay4 = 1.0;
+
+    Steinberg::Vst::ParamValue mTapGain1 = 1.0;
+    Steinberg::Vst::ParamValue mTapGain2 = 1.0;
+    Steinberg::Vst::ParamValue mTapGain3 = 1.0;
+    Steinberg::Vst::ParamValue mTapGain4 = 1.0;
+
+    Steinberg::Vst::ParamValue mFeedbackGain1 = 1.0;
+    Steinberg::Vst::ParamValue mFeedbackGain2 = 1.0;
+    Steinberg::Vst::ParamValue mFeedbackGain3 = 1.0;
+    Steinberg::Vst::ParamValue mFeedbackGain4 = 1.0;
+
     
     std::vector<float> delayBuffer;
     int writePos;
