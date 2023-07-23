@@ -36,8 +36,8 @@ float DelayLine::processBlock( float input )
     for( int i = 0; i < 4; i++)
     {
         output += buffer[readIndex[i]] * taps[i];
-        readIndex[i] = ( readIndex[i] + 1 ) % buffer.size();
     }
     return output;
 }
+
 
