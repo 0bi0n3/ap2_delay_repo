@@ -16,28 +16,28 @@ DelayLine::DelayLine( float sampleRate, float maxDelayTime) : sampleRate(sampleR
     writeIndex = 0;
     
     // Initialize tap gain
-    taps[0] = 0.5f;
-    taps[1] = 0.5f;
-    taps[2] = 0.5f;
-    taps[3] = 0.5f;
+    taps[0] = 1.0f;
+    taps[1] = 1.0f;
+    taps[2] = 1.0f;
+    taps[3] = 1.0f;
     
     // initialise tap mix
-    tapMix[0] = 0.5f;
-    tapMix[1] = 0.5f;
-    tapMix[2] = 0.5f;
-    tapMix[3] = 0.5f;
+    tapMix[0] = 1.0f;
+    tapMix[1] = 1.0f;
+    tapMix[2] = 1.0f;
+    tapMix[3] = 1.0f;
         
     // initialise feedback gain
-    feedbackGains[0] = 0.2f;
+    feedbackGains[0] = 0.02f;
     feedbackGains[1] = 0.0f;
     feedbackGains[2] = 0.0f;
     feedbackGains[3] = 0.0f;
     
     // initialise feedback
-    feedbacks[0] = 0.1f;
-    feedbacks[1] = 0.1f;
-    feedbacks[2] = 0.1f;
-    feedbacks[3] = 0.1f;
+    feedbacks[0] = 0.0f;
+    feedbacks[1] = 0.0f;
+    feedbacks[2] = 0.0f;
+    feedbacks[3] = 0.0f;
     
     // Initialize delayTimes with different values
     delayTimes[0] = 0.5f;
@@ -61,10 +61,15 @@ void DelayLine::setDelayTime(int tapIndex, float delayTimeSeconds)
     }
 }
 
-void DelayLine::setTapGain(int tapIndex, float gain)
+void DelayLine::setTapGain(int tapIndex, float gain_db)
 {
     if( tapIndex >= 0 && tapIndex < taps.size() )
     {
+        // Convert the gain value from dB to linear scale
+        float gain = pow(10.0, gain_db / 20.0);
+        
+        // Ensure gain is in [0,1] range to prevent distortion
+        gain = std::max(0.0f, std::min(1.0f, gain));
         taps[tapIndex] = gain;
     }
     else
@@ -75,9 +80,10 @@ void DelayLine::setTapGain(int tapIndex, float gain)
     float totalTapLevel = std::accumulate(taps.begin(), taps.end(), 0.0f);
     if(totalTapLevel == 0.0f)
     {
-        std::cout << "Error: totalTapLevel is zero. Please set at least one tap gain greater than zero.\n";
+        totalTapLevel = 0.1f;
     }
 }
+
 
 void DelayLine::setTapMix( int tapIndex, float mixLevel )
 {
@@ -99,23 +105,39 @@ void DelayLine::setTapMix( int tapIndex, float mixLevel )
 
 void DelayLine::setFeedbackGain(int tapIndex, float feedbackGain)
 {
-    if (feedbackGain > MAX_FEEDBACK_GAIN)
-    {
-        feedbackGain = MAX_FEEDBACK_GAIN;
-    }
-    else if (feedbackGain < -MAX_FEEDBACK_GAIN)
-    {
-        feedbackGain = -MAX_FEEDBACK_GAIN;
-    }
+//    if (feedbackGain > MAX_FEEDBACK_GAIN)
+//    {
+//        feedbackGain = MAX_FEEDBACK_GAIN;
+//    }
+//    else if (feedbackGain < -MAX_FEEDBACK_GAIN)
+//    {
+//        feedbackGain = -MAX_FEEDBACK_GAIN;
+//    }
 
     if( tapIndex >= 0 && tapIndex < feedbackGains.size() )
     {
-        feedbackGains[tapIndex] = feedbackGain;
+        // Convert the gain value from dB to linear scale
+        float gain = pow(10.0, feedbackGain / 20.0);
+        
+        // Ensure gain is in [0,1] range to prevent distortion
+        gain = std::max(0.0f, std::min(1.0f, gain));
+        feedbackGains[tapIndex] = gain;
     }
     else
     {
         std::cout << "Error: Invalid tap index. Please use a value between 0 and " << feedbackGains.size()-1 << ".\n";
     }
+}
+
+float DelayLine::getInterpolatedSample(float delaySamples)
+{
+    long delaySamplesInt = static_cast<long>(delaySamples);
+    float delaySamplesFrac = delaySamples - delaySamplesInt;
+
+    long readIndex1 = (writeIndex - delaySamplesInt + buffer.size()) % buffer.size();
+    long readIndex2 = (readIndex1 + 1) % buffer.size();
+
+    return (1.0f - delaySamplesFrac) * buffer[readIndex1] + delaySamplesFrac * buffer[readIndex2];
 }
 
 void DelayLine::processBlock(const std::vector<float>& input, std::vector<float>& output)
@@ -128,25 +150,30 @@ void DelayLine::processBlock(const std::vector<float>& input, std::vector<float>
     {
         float currentSample = input[i];
         float outputSample = 0.0f;
-        float totalTapLevel = 0.0f;
+        float totalTapMix = 0.0f;
 
         for (int j = 0; j < 4; ++j)
         {
             // Calculate read index based on current delay time and write index
-            long delaySamples = static_cast<int>( delayTimes[j] * sampleRate );
-            long readIndex = (writeIndex - delaySamples + buffer.size()) % buffer.size();
-
-            feedbacks[j] = buffer[readIndex] * feedbackGains[j] * 0.1;
-            outputSample += buffer[readIndex] * tapMix[j];
-            totalTapLevel += taps[j];
+            float delaySamples = delayTimes[j] * sampleRate;
+            float delayedSample = getInterpolatedSample(delaySamples);
+            
+            feedbacks[j] = delayedSample * feedbackGains[j];
+            
+            float tapGainLinear = taps[j];
+            float tapMixLinear = tapMix[j];
+            
+            outputSample += delayedSample * tapGainLinear * tapMixLinear;
+            totalTapMix += tapMixLinear;
         }
 
-        // Normalise output by totalTapLevel
-        if (totalTapLevel > 0.0f)
+        // Normalise output by totalTapMix
+        if (totalTapMix > 0.0f)
         {
-            outputSample /= totalTapLevel;
+            outputSample /= totalTapMix;
         }
-
+        
+        // Ensure outputSample is in [-1, 1] range to prevent distortion
         outputSample = std::max(-1.0f, std::min(1.0f, outputSample));
 
         // Write input to buffer, scaled by feedbacks
@@ -160,3 +187,4 @@ void DelayLine::processBlock(const std::vector<float>& input, std::vector<float>
         output[i] = outputSample;
     }
 }
+

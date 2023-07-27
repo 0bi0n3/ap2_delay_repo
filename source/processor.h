@@ -90,9 +90,13 @@ private:
     double denormalisedTapGain4;
     
     double denormalisedFeedbackGain1;
+    double linearFeedbackGain1;
     double denormalisedFeedbackGain2;
+    double linearFeedbackGain2;
     double denormalisedFeedbackGain3;
+    double linearFeedbackGain3;
     double denormalisedFeedbackGain4;
+    double linearFeedbackGain4;
 
 };
 

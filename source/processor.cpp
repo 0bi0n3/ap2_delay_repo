@@ -25,7 +25,7 @@ namespace delay_sfx {
 // delay_oneProcessor
 //------------------------------------------------------------------------
 delay_oneProcessor::delay_oneProcessor ()
-: delayLine(48000, 1.0f)
+: delayLine(44100, 1.0f)
 {
 	//--- set the wanted controller for our processor
 	setControllerClass (kdelay_oneControllerUID);
@@ -176,6 +176,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         {
                             mFeedbackGain1 = value;
                             denormalisedFeedbackGain1 = (mFeedbackGain1 * 40.0) - 20.0;
+                            // Convert dB to linear scale
+                            linearFeedbackGain1 = std::pow(10, denormalisedFeedbackGain1 / 20.0);
                         }
                     break;
                         
@@ -184,6 +186,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         {
                             mFeedbackGain2 = value;
                             denormalisedFeedbackGain2 = (mFeedbackGain2 * 40.0) - 20.0;
+                            // Convert dB to linear scale
+                            linearFeedbackGain2 = std::pow(10, denormalisedFeedbackGain2 / 20.0);
                         }
                     break;
                         
@@ -192,6 +196,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         {
                             mFeedbackGain3 = value;
                             denormalisedFeedbackGain3 = (mFeedbackGain3 * 40.0) - 20.0;
+                            // Convert dB to linear scale
+                            linearFeedbackGain3 = std::pow(10, denormalisedFeedbackGain3 / 20.0);
                         }
                     break;
                         
@@ -200,6 +206,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
                         {
                             mFeedbackGain4 = value;
                             denormalisedFeedbackGain4 = (mFeedbackGain4 * 40.0) - 20.0;
+                            // Convert dB to linear scale
+                            linearFeedbackGain4 = std::pow(10, denormalisedFeedbackGain4 / 20.0);
                         }
                     break;
 				}
@@ -215,22 +223,24 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
     //--- Here you have to implement your processing
     int32 numChannels = data.inputs[0].numChannels;
     
+//    delayLine.getSampleRate(sampleRate);
+    
     // Update delay times and feedback gains
     delayLine.setDelayTime(0, denormalisedDelay1);
     delayLine.setTapMix(0, denormalisedTapGain1);
-    delayLine.setFeedbackGain(0, denormalisedFeedbackGain1);
+    delayLine.setFeedbackGain(0, linearFeedbackGain1);
 
     delayLine.setDelayTime(1, denormalisedDelay2);
     delayLine.setTapMix(1, denormalisedTapGain2);
-    delayLine.setFeedbackGain(1, denormalisedFeedbackGain2);
+    delayLine.setFeedbackGain(1, linearFeedbackGain2);
 
     delayLine.setDelayTime(2, denormalisedDelay3);
     delayLine.setTapMix(2, denormalisedTapGain3);
-    delayLine.setFeedbackGain(2, denormalisedFeedbackGain3);
+    delayLine.setFeedbackGain(2, linearFeedbackGain3);
 
     delayLine.setDelayTime(3, denormalisedDelay4);
     delayLine.setTapMix(3, denormalisedTapGain4);
-    delayLine.setFeedbackGain(3, denormalisedFeedbackGain4);
+    delayLine.setFeedbackGain(3, linearFeedbackGain4);
 
     //---get audio buffers using helper-functions(vstaudioprocessoralgo.h)-------------
     uint32 sampleFramesSize = getSampleFramesSizeInBytes(processSetup, data.numSamples);
@@ -242,7 +252,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
     // mark our outputs has not silent
     data.outputs[0].silenceFlags = 0;
     
-    float gain = mGain;
+    float gain_db = mGain;
+    float gain_linear {0.0f};
         
     // for each channel (left and right)
     for (int32 i = 0; i < numChannels; i++)
@@ -281,7 +292,8 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
         // Write the processed samples to the output
         for (float output : outputBlock)
         {
-            (*ptrOut++) = output * gain;
+            gain_linear = pow(10.0, gain_db / 20.0);
+            (*ptrOut++) = output * gain_linear;
         }
     }
  

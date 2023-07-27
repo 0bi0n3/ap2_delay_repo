@@ -16,14 +16,16 @@ class DelayLine
 public:
     DelayLine(float sampleRate, float maxDelayTime);
 
+    float getSampleRate( float sampleRate );
     void setDelayTime(int tapIndex, float delayTimeSeconds);
     void setTapGain(int tapIndex, float gain);
     void setTapMix(int tapIndex, float mixLevel);
     void setFeedbackGain(int tapIndex, float feedbackGain);
+    float getInterpolatedSample(float delaySamples);
     void processBlock(const std::vector<float>& input, std::vector<float>& output);
 
 private:
-    const float MAX_FEEDBACK_GAIN = 0.8f;
+    const float MAX_FEEDBACK_GAIN = 0.5f;
 
     float sampleRate;
     int writeIndex;
