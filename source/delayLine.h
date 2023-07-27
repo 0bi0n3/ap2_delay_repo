@@ -14,18 +14,25 @@
 class DelayLine
 {
 public:
-    DelayLine( float sampleRate, float maxDelayTime);
-    
-    void setDelayTime( int tapIndex, float delayTimeSeconds, float sampleRate );
-    void setTapMix(int tapIndex, float mixLevel );
-    float processBlock( float input );
-    
-private:
-    std::vector<float> buffer;
-    int writeIndex;
-    std::array<int, 4> readIndex;
-    std::array<float, 4> taps;
-};
+    DelayLine(float sampleRate, float maxDelayTime);
 
+    void setDelayTime(int tapIndex, float delayTimeSeconds);
+    void setTapGain(int tapIndex, float gain);
+    void setTapMix(int tapIndex, float mixLevel);
+    void setFeedbackGain(int tapIndex, float feedbackGain);
+    void processBlock(const std::vector<float>& input, std::vector<float>& output);
+
+private:
+    const float MAX_FEEDBACK_GAIN = 0.8f;
+
+    float sampleRate;
+    int writeIndex;
+    std::array<float, 4> delayTimes;
+    std::array<float, 4> taps;
+    std::array<float, 4> tapMix;
+    std::array<float, 4> feedbackGains;
+    std::array<float, 4> feedbacks;
+    std::vector<float> buffer;
+};
 
 #endif /* delayLine_h */

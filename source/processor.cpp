@@ -4,6 +4,7 @@
 
 #include "processor.h"
 #include "cids.h"
+#include <iostream>
 
 #include "base/source/fstreamer.h"
 #include "pluginterfaces/vst/ivstparameterchanges.h"
@@ -28,9 +29,6 @@ delay_oneProcessor::delay_oneProcessor ()
 {
 	//--- set the wanted controller for our processor
 	setControllerClass (kdelay_oneControllerUID);
-    
-    delayLine.setDelayTime(0, 0.5f, 48000);
-    delayLine.setTapMix(0, 0.5f);
 }
 
 //------------------------------------------------------------------------
@@ -218,17 +216,21 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
     int32 numChannels = data.inputs[0].numChannels;
     
     // Update delay times and feedback gains
-    delayLine.setDelayTime(0, denormalisedDelay1, sampleRate);
-    delayLine.setTapMix(0, denormalisedFeedbackGain1);
+    delayLine.setDelayTime(0, denormalisedDelay1);
+    delayLine.setTapMix(0, denormalisedTapGain1);
+    delayLine.setFeedbackGain(0, denormalisedFeedbackGain1);
 
-    delayLine.setDelayTime(1, denormalisedDelay2, sampleRate);
-    delayLine.setTapMix(1, denormalisedFeedbackGain2);
+    delayLine.setDelayTime(1, denormalisedDelay2);
+    delayLine.setTapMix(1, denormalisedTapGain2);
+    delayLine.setFeedbackGain(1, denormalisedFeedbackGain2);
 
-    delayLine.setDelayTime(2, denormalisedDelay3, sampleRate);
-    delayLine.setTapMix(2, denormalisedFeedbackGain3);
+    delayLine.setDelayTime(2, denormalisedDelay3);
+    delayLine.setTapMix(2, denormalisedTapGain3);
+    delayLine.setFeedbackGain(2, denormalisedFeedbackGain3);
 
-    delayLine.setDelayTime(3, denormalisedDelay4, sampleRate);
-    delayLine.setTapMix(3, denormalisedFeedbackGain4);
+    delayLine.setDelayTime(3, denormalisedDelay4);
+    delayLine.setTapMix(3, denormalisedTapGain4);
+    delayLine.setFeedbackGain(3, denormalisedFeedbackGain4);
 
     //---get audio buffers using helper-functions(vstaudioprocessoralgo.h)-------------
     uint32 sampleFramesSize = getSampleFramesSizeInBytes(processSetup, data.numSamples);
@@ -241,27 +243,48 @@ tresult PLUGIN_API delay_oneProcessor::process (Vst::ProcessData& data)
     data.outputs[0].silenceFlags = 0;
     
     float gain = mGain;
+        
     // for each channel (left and right)
     for (int32 i = 0; i < numChannels; i++)
     {
+        std::vector<float> inputBlock;
+        std::vector<float> outputBlock;
+
         int32 samples = data.numSamples;
         Vst::Sample32* ptrIn = (Vst::Sample32*)in[i];
         Vst::Sample32* ptrOut = (Vst::Sample32*)out[i];
-        Vst::Sample32 tmp;
-        
-        // for each sample in this channel
+
+        // Gather all samples into the input block
         while (--samples >= 0)
         {
-            // process delay
-           float input = static_cast<float>(*ptrIn++);
-           float output = gain * delayLine.processBlock(input);
-           (*ptrOut++) = output;
-            // apply gain
-//            tmp = (*ptrIn++) * gain;
-//            (*ptrOut++) = tmp;
-    
+            float input = static_cast<float>(*ptrIn++);
+            inputBlock.push_back(input);
+        }
+
+        // Process the entire block
+        delayLine.processBlock(inputBlock, outputBlock);
+        
+        // Test line for audio pass through
+//        outputBlock = inputBlock;
+        float avg = 0.0f;
+        for (auto val : inputBlock)
+            avg += std::abs(val);
+        avg /= inputBlock.size();
+        std::cout << "Average input level: " << avg << "\n";
+        
+        float avgOut = 0.0f;
+        for (auto val : outputBlock)
+            avgOut += std::abs(val);
+        avgOut /= outputBlock.size();
+        std::cout << "Average output level: " << avgOut << "\n";
+
+        // Write the processed samples to the output
+        for (float output : outputBlock)
+        {
+            (*ptrOut++) = output * gain;
         }
     }
+ 
     // Here could check the silent flags
     //---check if silence---------------
     // normally we have to check each channel (simplification)
@@ -293,7 +316,7 @@ tresult PLUGIN_API delay_oneProcessor::setupProcessing (Vst::ProcessSetup& newSe
     sampleRate = newSetup.sampleRate;
     
     // Reconfigure delayLine with the actual sampleRate
-       delayLine.setDelayTime(0, 0.5f, sampleRate);
+       delayLine.setDelayTime(0, 0.5f);
     
 	return AudioEffect::setupProcessing (newSetup);
 }

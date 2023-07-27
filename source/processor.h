@@ -73,14 +73,6 @@ protected:
     Steinberg::Vst::ParamValue mFeedbackGain3 = 1.0;
     Steinberg::Vst::ParamValue mFeedbackGain4 = 1.0;
 
-    
-    std::vector<float> delayBuffer;
-    int writePos;
-    int readPos;
-    float tapDelay[ 4 ];
-    float tapGain[ 4 ];
-    float feedbackGain[ 4 ];
-    
 private:
     double sampleRate;
     DelayLine delayLine;
